@@ -48,10 +48,7 @@ class Usuario {
 		if (count($results) > 0){ //tratamento de erro para selecionar somente os tb_usuarios existentes
 			$row = $results[0];
 
-			$this->setIdUsuario($row["idusuario"]);
-			$this->setDesLogin($row["deslogin"]);
-			$this->setDesSenha($row["dessenha"]);
-			$this->setDtCadastro(new DateTime($row["dtcadastro"]));
+			$this->setData($results[0]);
 		}
 	}
 
@@ -83,13 +80,50 @@ class Usuario {
 		if (count($results) > 0){ //tratamento de erro para aceitar o login e senha existentes na tabela tb_usuarios
 			$row = $results[0];
 
-			$this->setIdUsuario($row["idusuario"]);
-			$this->setDesLogin($row["deslogin"]);
-			$this->setDesSenha($row["dessenha"]);
-			$this->setDtCadastro(new DateTime($row["dtcadastro"]));
+			$this->setData($results[0]);
 		} else { // caso o login e senha estejam incorretos aparecerá a seguinte mensagem
 			throw new Exception("Login e/ou senha inválidos.");
 		}
+	}
+
+	//FUNÇÃO PARA SIMPLIFICAR O CÓDIGO, FAZ OS SETERS DE TODOS OS VALORES DE UM USUÁRIO DA TABELA
+	public function setData($data){
+		$this->setIdUsuario($data["idusuario"]);
+		$this->setDesLogin($data["deslogin"]);
+		$this->setDesSenha($data["dessenha"]);
+		$this->setDtCadastro(new DateTime($data["dtcadastro"]));
+	}
+
+	//FUNÇÃO QUE INSERE UM NOVO USUÁRIO E SENHA
+	public function insert(){
+		$sql = new Sql();
+
+		$results = $sql->select("CALL sp_usuarios_insert(:LOGIN, :PASSWORD)", array(
+			':LOGIN'=>$this->getDeslogin(),
+			':PASSWORD'=>$this->getDessenha()
+		));
+
+		if (count($results) > 0){
+			$this->setData($results[0]);
+		}
+	}
+
+	public function update($login, $password){
+		$this->setDeslogin($login);
+		$this->setDessenha($password);
+
+		$sql = new Sql();
+
+		$sql->query("UPDATE tb_usuarios SET deslogin = :LOGIN, dessenha = :PASSWORD WHERE idusuario = :ID", array(
+			':LOGIN'=>$this->getDeslogin(),
+			':PASSWORD'=>$this->getDessenha(),
+			':ID'=>$this->getIdusuario()
+		));
+	}
+
+	public function __construct($login = "", $password = ""){ //colocando as aspas vai preencher a variável com nada se ela não for chamada, então a torna não obrigatória
+		$this->setDeslogin($login);
+		$this->setDessenha($password);
 	}
 
 	public function __toString(){

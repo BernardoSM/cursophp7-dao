@@ -17,9 +17,21 @@ require_once("config.php"); //o arquivo config chama todas as classes (em arquiv
 //echo json_encode($search);
 
 //CARREGA UM USUÁRIO USANDO O LOGIN E A SENHA
+//$usuario = new Usuario();
+//$usuario->login("jose", "1234567");
+//echo $usuario;
+
+
+//INSERE UM NOVO USUÁRIO E SENHA
+//$aluno = new Usuario("aluno", "wolf");
+//$aluno->insert();
+//echo $aluno;
+
+
 $usuario = new Usuario();
-$usuario->login("jose", "1234567");
+
+$usuario->loadById(6);
+$usuario->update("professor","wooolf");
 
 echo $usuario;
-
  ?>
