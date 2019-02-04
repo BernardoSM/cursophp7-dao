@@ -108,6 +108,7 @@ class Usuario {
 		}
 	}
 
+	//FUNÇÃO PARA ATUALIZAR UM NOVO USUÁRIO E SENHA
 	public function update($login, $password){
 		$this->setDeslogin($login);
 		$this->setDessenha($password);
@@ -119,6 +120,19 @@ class Usuario {
 			':PASSWORD'=>$this->getDessenha(),
 			':ID'=>$this->getIdusuario()
 		));
+	}
+
+	//FUNÇÃO DE DELETAR UM USUÁRIO
+	public function delete(){
+		$sql = new Sql();
+		$sql->query("DELETE FROM tb_usuarios WHERE idusuario = :ID", array(
+			':ID'=>$this->getIdusuario()
+		));
+
+		$this->setIdusuario(0);
+		$this->setDeslogin("");
+		$this->setDessenha("");
+		$this->setDtcadastro(new DateTime());
 	}
 
 	public function __construct($login = "", $password = ""){ //colocando as aspas vai preencher a variável com nada se ela não for chamada, então a torna não obrigatória

@@ -27,11 +27,17 @@ require_once("config.php"); //o arquivo config chama todas as classes (em arquiv
 //$aluno->insert();
 //echo $aluno;
 
+//ALTERANDO UM USUÁRIO E SENHA
+//$usuario = new Usuario();
+//$usuario->loadById(6);
+//$usuario->update("professor","wooolf");
+//echo $usuario;
 
 $usuario = new Usuario();
 
-$usuario->loadById(6);
-$usuario->update("professor","wooolf");
+$usuario->loadById(7);
+$usuario->delete();
 
 echo $usuario;
+
  ?>
